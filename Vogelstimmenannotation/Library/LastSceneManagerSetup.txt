@@ -1,4 +1,4 @@
 sceneSetups:
-- path: "Assets/Blockh\xFCtte.unity"
+- path: Assets/Camp.unity
   isLoaded: 1
   isActive: 1
