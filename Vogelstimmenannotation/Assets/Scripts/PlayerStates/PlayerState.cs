@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class PlayerState
 {
@@ -9,11 +8,13 @@ public class PlayerState
     public Dictionary<Commands.Player?, Action> ActionsStateUpdate { get; set; }
     public Action[] OnStateEnterActions { get; set; }
     public Action[] OnStateExitActions { get; set; }
-    private Action _action;
+    private Action _bufferedAction;
 
     public PlayerState()
     {
-        
+        ActionsStateUpdate = null;
+        OnStateEnterActions = null;
+        OnStateExitActions = null;
     }
 
     public PlayerState(Dictionary<Commands.Player?, Action> actionsStateUpdate, Action[] onStateEnterActions, Action[] onStateExitActions)
@@ -36,8 +37,8 @@ public class PlayerState
     {
         if (command == null) return;
 
-        if (ActionsStateUpdate.TryGetValue(command, out _action))
-            _action();
+        if (ActionsStateUpdate.TryGetValue(command, out _bufferedAction))
+            _bufferedAction();
     }
 
     public virtual void OnStateExit()

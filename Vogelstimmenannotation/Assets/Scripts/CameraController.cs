@@ -28,28 +28,31 @@ public class CameraController : MonoBehaviour
 	    if (Input.GetKey(KeyCode.Mouse1))
 	        Rotate();
 
-        CalculateMovement();
-        Move();
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        {
+            CalculateMovement();
+            Move();
+        }
 	}
 
     private void CalculateMovement()
     {
-        _direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        _direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
         _cameraRotation = _camera.transform.eulerAngles;
         _cameraRotation.x = 0;
 
-        _direction = Quaternion.Euler(_cameraRotation) * _direction;
+        _direction = Vector3.Normalize(Quaternion.Euler(_cameraRotation) * _direction);
     }
 
     private void Move()
     {
+        Debug.Log("Moving..");
         transform.Translate(_direction * WalkSpeed * Time.deltaTime);
     }
 
     private void Rotate()
     {
-
         if (Invert) _mouseY += RotationSpeed * Input.GetAxis("Mouse Y");
         else _mouseY -= RotationSpeed * Input.GetAxis("Mouse Y");
         _mouseX += RotationSpeed * Input.GetAxis("Mouse X");

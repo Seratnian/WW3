@@ -1,17 +1,23 @@
 ﻿using UnityEngine;
 using System.IO;
 
-public class SaveManager<T>
+public class SaveToJSON<T>
 {
 
     public string SaveDataPath { get; private set; }
     public string SaveFileName { get; private set; }
-    private string _fullPath { get { return string.Format("{0}/{1}", Application.persistentDataPath, SaveFileName); } }
+    public string _fullPath { get { return string.Format("{0}/{1}", SaveDataPath, SaveFileName); } }
 
-    public SaveManager()
+    public SaveToJSON()
     {
         SaveFileName = "savefile.json";
         SaveDataPath = string.Format("{0}/{1}", Application.persistentDataPath, SaveFileName);
+    }
+
+    public SaveToJSON(string path, string name)
+    {
+        SaveFileName = name;
+        SaveDataPath = path;
     }
 
     public void Save(T saveFile)
@@ -26,6 +32,11 @@ public class SaveManager<T>
         T saveFile = JsonUtility.FromJson<T>(json);
 
         return saveFile;
+    }
+
+    public string ConvertToJSON(T saveFile)
+    {
+        return JsonUtility.ToJson(saveFile);
     }
 
     public void SetSavePathAndName(string path, string name)

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Commands;
 using UnityEngine;
 
@@ -16,44 +14,38 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        //temporarily
         TransitionToState
             (
             new PlayerState(new Dictionary<Commands.Player?, Action>() {{Commands.Player.Interact, () => { }}},
-                new Action[] { () => Debug.Log("Default empty starting state. Press A for testing.") }, 
+                new Action[] { () => Debug.Log("Default empty starting state. Press enter for testing.") }, 
                 null)
                 );
 
-        _command = null;
         BuildBindings();
+        BuildStates();
     }
 
     private void BuildBindings()
     {
-        _commandBindings = new Dictionary<string, Commands.Player?> { { "Fire1", Commands.Player.Interact }, {"Jump", Commands.Player.OpenMenu} };        
+        _commandBindings = new Dictionary<string, Commands.Player?> { { "Fire1", Commands.Player.Interact }, {"Jump", Commands.Player.StartMinigame}, { "Cancel", Commands.Player.OpenMenu } };        
         _commandKeys = _commandBindings.Keys.ToArray();
-        _commandKeysDownOnly = new[] {"Fire1", "Jump"};
+        _commandKeysDownOnly = new[] {"Fire1", "Jump", "Cancel"};
+    }
+
+    private void BuildStates()
+    {
+
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A)) CreateTestStatesAndRun();
+        if (Input.GetKeyDown(KeyCode.Return)) CreateTestStatesAndRun();
 
         if (Input.anyKey)
         {
             _currentPlayerState.OnStateUpdate(GetPlayerCommand());
         }
-    }
-
-    private void TransitionToState(PlayerState state)
-    {
-        //Don't set _currentState to null
-        if (state == null) return;
-
-        if(_currentPlayerState!=null)
-            _currentPlayerState.OnStateExit();
-
-        state.OnStateEnter();
-        _currentPlayerState = state;
     }
 
     private Commands.Player? GetPlayerCommand()
@@ -81,28 +73,39 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
+    private void TransitionToState(PlayerState state)
+    {
+        //Don't set _currentState to null
+        if (state == null) return;
+
+        if (_currentPlayerState != null)
+            _currentPlayerState.OnStateExit();
+
+        state.OnStateEnter();
+        _currentPlayerState = state;
+    }
+
     private void CreateTestStatesAndRun()
     {
         Debug.Log("Creating states..");
 
         PlayerState stateOne = new PlayerState();
-        PlayerState stateTwo = new PlayerState( null, new Action[] { () => Debug.Log("Transition complete. State Two entered.") }, null);
-
-        stateTwo.ActionsStateUpdate = new Dictionary<Player?, Action>()
+        PlayerState stateTwo = new PlayerState(new Dictionary<Player?, Action>()
         {
             {Commands.Player.Interact, () => Debug.Log("Press space to transition to State One.")},
-            {Commands.Player.OpenMenu, () => TransitionToState(stateOne)}
-        };
+            {Commands.Player.StartMinigame, () => TransitionToState(stateOne)},
+            {Commands.Player.OpenMenu, () => MenuScript.ToggleMenu() }
+        },
+        new Action[] { () => Debug.Log("Transition complete. State Two entered.") },
+        null);
 
         Dictionary<Commands.Player?, Action> stateOneDic =
-            new Dictionary<Commands.Player?, Action> {{Commands.Player.Interact, () => TransitionToState(stateTwo)}};
+            new Dictionary<Commands.Player?, Action> { { Commands.Player.Interact, () => TransitionToState(stateTwo) }, { Commands.Player.OpenMenu, () => MenuScript.ToggleMenu() } };
 
         stateOne = new PlayerState(stateOneDic, new Action[] { () => Debug.Log("State One entered. Click the left mouse button to transition to state two.") }, new Action[] { () => Debug.Log("State One exited.") });        
 
         Debug.Log("States complete.");
 
         TransitionToState(stateOne);
-
-
     }
 }

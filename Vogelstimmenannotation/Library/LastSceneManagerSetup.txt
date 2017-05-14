@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Camp.unity
+- path: Assets/Hut.unity
   isLoaded: 1
   isActive: 1
