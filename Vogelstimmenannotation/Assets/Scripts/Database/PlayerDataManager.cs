@@ -1,38 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public enum SavePolicy { OverrideOlder, OverrideAll}
 public enum PlayerDataSource { Cloud, Local}
 
 public class PlayerDataManager : MonoBehaviour {
 
     [SerializeField]private PlayerData _playerData;
     private CloudDataHandler<PlayerData> _cloudDataHandler;
-    private SaveToJSON<PlayerData> _localDataHandler;
-    private PlayerData CurrentLocalSave { get { return _localDataHandler.Load(); } }
-    private PlayerData CurrentCloudSave { get { return _cloudDataHandler.Load(); } }
+    private LocalDataHandler<PlayerData> _localDataHandler;
 
-	void Start () {
-        _cloudDataHandler = new CloudDataHandlerImplementation();
-        _localDataHandler = new SaveToJSON<PlayerData>();
+	void Start ()
+    {
+        _cloudDataHandler = new CloudDataHandlerImplementation<PlayerData>();
+        _localDataHandler = new LocalDataHandlerImplementation<PlayerData>();
 	}
 	
-    public void SaveData(SavePolicy policy)
+    public void SaveDataOverrideOlder()
     {
-        if(policy==SavePolicy.OverrideAll)
-        {
-            _localDataHandler.Save(_playerData);
+        if(!_cloudDataHandler.CloudDataIsNewer(_playerData))                           
             _cloudDataHandler.Save(_playerData);
-        }
-        if(policy==SavePolicy.OverrideOlder)
-        {
-            if(_cloudDataHandler.CloudIsOlder(CurrentLocalSave))
-            {
-                _localDataHandler.Save(_playerData);
-                _cloudDataHandler.Save(_playerData);
-            }
-        }
+        if(!_localDataHandler.LocalDataIsNewer(_playerData))
+            _localDataHandler.Save(_playerData);
     }
 
     public void LoadData(PlayerDataSource source)
@@ -49,13 +36,11 @@ public class PlayerDataManager : MonoBehaviour {
 
     public void UpdateEverythingToLatestVersion()
     {
-        if(_cloudDataHandler.CloudIsOlder(CurrentLocalSave))
-        {
-            _cloudDataHandler.Save(CurrentLocalSave);
-        }
-        else
-        {
-            _localDataHandler.Save(CurrentCloudSave);
-        }
+        if(_cloudDataHandler.CloudDataIsNewer(_playerData))
+            LoadData(PlayerDataSource.Cloud);
+        if(_localDataHandler.LocalDataIsNewer(_playerData))
+            LoadData(PlayerDataSource.Local);
+        _cloudDataHandler.Save(_playerData);
+        _localDataHandler.Save(_playerData);
     }
 }

@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CloudDataHandlerImplementation : CloudDataHandler<PlayerData>
+public class CloudDataHandlerImplementation<T> : CloudDataHandler<T> where T:PlayerData
 {
-    private SaveToJSON<PlayerData> _localDataHandler;
-
-    public bool CloudIsOlder(PlayerData localSave)
-    {
-        PlayerData cloudSave = Load();
-        return cloudSave.Version < localSave.Version;
-    }
-
-    public PlayerData Load()
+    public bool CloudDataIsNewer(T localSave)
     {
         throw new NotImplementedException();
     }
 
-    public void Save(PlayerData saveFile)
+    public T Load()
     {
-        string json = _localDataHandler.ConvertToJSON(saveFile);
+        throw new NotImplementedException();
+    }
+
+    public void Save(T saveFile)
+    {
+        string json = JsonUtility.ToJson(saveFile);
 
         //TODO: save json to cloud
         throw new NotImplementedException();

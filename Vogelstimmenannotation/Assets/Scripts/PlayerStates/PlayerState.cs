@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 public class PlayerState
 {
-    public bool Testing { set; get; }
-
     public Dictionary<Commands.Player?, Action> ActionsStateUpdate { get; set; }
     public Action[] OnStateEnterActions { get; set; }
     public Action[] OnStateExitActions { get; set; }
     private Action _bufferedAction;
 
+#region Constructor
     public PlayerState()
     {
         ActionsStateUpdate = null;
@@ -23,6 +22,7 @@ public class PlayerState
         OnStateEnterActions = onStateEnterActions;
         OnStateExitActions = onStateExitActions;
     }
+#endregion
 
     public virtual void OnStateEnter()
     {

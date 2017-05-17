@@ -1,25 +1,29 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestSaveLoad : MonoBehaviour {
 
-    private SaveToJSON<PlayerData> saveManager;
+    private LocalDataHandlerImplementation<PlayerData> _saveManager;
 
     private void Start()
     {
-        saveManager = new SaveToJSON<PlayerData>();
-        saveManager.SetSavePathAndName("D:/", "playerData.json");
-        Debug.Log("SavePath: " + saveManager._fullPath);
+        _saveManager = new LocalDataHandlerImplementation<PlayerData>("D:/", "playerData.json");
+        Debug.Log("SavePath: " + _saveManager.FullPath);
     }
 
     public void TestFunctionality()
     {
+        StartCoroutine(Test());
+    }
+
+    private IEnumerator Test()
+    {
         PlayerData original = new PlayerData();
 
-        saveManager.Save(original);
-        PlayerData loaded = saveManager.Load();
+        _saveManager.Save(original);
+        PlayerData loaded = _saveManager.Load();
 
-        //Debug.Log(string.Format("Original data: {0}\nLoaded data: {1}\nOriginal compared to loaded time stamp: {2}", original.TimeStamp, loaded.TimeStamp, System.DateTime.Compare(original.TimeStamp, loaded.TimeStamp)));
+        yield return null;
+        Debug.Log(string.Format("Original data: {0}\nLoaded data: {1}\nTimeDate.Compare(Saved, Loaded): {2}", original.TimeStamp, loaded.TimeStamp, System.DateTime.Compare(original.TimeStamp, loaded.TimeStamp)));
     }
 }
