@@ -82,20 +82,26 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Scripts\Database\PlayerData\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Bird.cs" />
+    <Compile Include="Assets\Scripts\BirdFactory.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Commands.cs" />
-    <Compile Include="Assets\Scripts\Database\CloudDataHandler.cs" />
-    <Compile Include="Assets\Scripts\Database\CloudDataHandlerImplementation.cs" />
-    <Compile Include="Assets\Scripts\Database\PlayerData.cs" />
-    <Compile Include="Assets\Scripts\Database\PlayerDataManager.cs" />
-    <Compile Include="Assets\Scripts\Database\SaveToJSON.cs" />
+    <Compile Include="Assets\Scripts\Database\BirdData\SomeSoundDatabase.cs" />
+    <Compile Include="Assets\Scripts\Database\PlayerData\CloudDataHandler.cs" />
+    <Compile Include="Assets\Scripts\Database\PlayerData\CloudDataHandlerImplementation.cs" />
+    <Compile Include="Assets\Scripts\Database\PlayerData\LocalDataHandler.cs" />
+    <Compile Include="Assets\Scripts\Database\PlayerData\LocalDataHandlerImplementation.cs" />
+    <Compile Include="Assets\Scripts\Database\PlayerData\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Database\PlayerData\PlayerDataManager.cs" />
     <Compile Include="Assets\Scripts\MenuScript.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerStates\PlayerState.cs" />
     <Compile Include="Assets\Scripts\TestSaveLoad.cs" />
-    <Compile Include="Assets\Scripts\TestScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

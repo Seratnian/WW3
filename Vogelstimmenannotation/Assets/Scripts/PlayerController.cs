@@ -14,13 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        //temporarily
-        TransitionToState
-            (
-            new PlayerState(new Dictionary<Commands.Player?, Action>() {{Commands.Player.Interact, () => { }}},
-                new Action[] { () => Debug.Log("Default empty starting state. Press enter for testing.") }, 
-                null)
-                );
+        CreateBirdShooterStates();
 
         BuildBindings();
         BuildStates();
@@ -83,6 +77,24 @@ public class PlayerController : MonoBehaviour
 
         state.OnStateEnter();
         _currentPlayerState = state;
+    }
+
+    private void CreateBirdShooterStates()
+    {
+        Dictionary<Commands.Player?, Action> dic = new Dictionary<Player?, Action>
+        {
+            {
+                Commands.Player.Interact, () =>
+                {
+                    Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                    RaycastHit hit;
+                    if(Physics.Raycast(ray, out hit))
+                        hit.collider.SendMessage("Hit");
+                }
+            }
+        };
+        PlayerState state = new PlayerState(dic,null,null);
+        TransitionToState(state);
     }
 
     private void CreateTestStatesAndRun()
