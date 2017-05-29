@@ -87,20 +87,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\BadProgrammingScript.cs" />
     <Compile Include="Assets\Scripts\Bird.cs" />
     <Compile Include="Assets\Scripts\BirdFactory.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Commands.cs" />
-    <Compile Include="Assets\Scripts\Database\BirdData\SomeSoundDatabase.cs" />
-    <Compile Include="Assets\Scripts\Database\PlayerData\CloudDataHandler.cs" />
-    <Compile Include="Assets\Scripts\Database\PlayerData\CloudDataHandlerImplementation.cs" />
+    <Compile Include="Assets\Scripts\Database\BirdData\BirdDatabase.cs" />
+    <Compile Include="Assets\Scripts\Database\BirdData\BirdDatabaseHandler.cs" />
+    <Compile Include="Assets\Scripts\Database\BirdData\BirdSong.cs" />
     <Compile Include="Assets\Scripts\Database\PlayerData\LocalDataHandler.cs" />
     <Compile Include="Assets\Scripts\Database\PlayerData\LocalDataHandlerImplementation.cs" />
     <Compile Include="Assets\Scripts\Database\PlayerData\PlayerData.cs" />
-    <Compile Include="Assets\Scripts\Database\PlayerData\PlayerDataManager.cs" />
-    <Compile Include="Assets\Scripts\MenuScript.cs" />
+    <Compile Include="Assets\Scripts\Menu\MenuScript.cs" />
+    <Compile Include="Assets\Scripts\Menu\ProfileCreditsPage.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerStates\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Profiles\Profile.cs" />
+    <Compile Include="Assets\Scripts\Profiles\ProfilesManager.cs" />
     <Compile Include="Assets\Scripts\TestSaveLoad.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
