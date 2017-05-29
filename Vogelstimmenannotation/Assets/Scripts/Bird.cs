@@ -8,33 +8,24 @@ using UnityEngine.Networking;
 public class Bird : MonoBehaviour
 {
     [SerializeField]private AudioSource _audioSource;
-    private static SomeSoundDatabase _someSoundDatabase;
+    private static BirdDatabaseHandler _birdDatabaseHandler;    
 
 	private void Start ()
 	{
-	    if (_someSoundDatabase == null) _someSoundDatabase = SomeSoundDatabase.GetSomeSoundDatabaseInstance();
-	    
-	    StartCoroutine(LoadBirdSong());
+	    if (_birdDatabaseHandler == null) _birdDatabaseHandler = BadProgrammingScript.GetBirdDatabaseInstance();
+
+	    LoadBirdSong();
 	}
 
     private void Update()
     {
-        if(!_audioSource.isPlaying)
-            _audioSource.Play();
+        if(_audioSource.clip==null)
+            LoadBirdSong();
     }
 
-    private IEnumerator LoadBirdSong()
+    private void LoadBirdSong()
     {
-        var clip = new WWW(_someSoundDatabase.GetRandomAudioClipUrl()).GetAudioClip(true, true);
-        yield return null;
-        
-        while (clip.loadState != AudioDataLoadState.Loaded && clip.loadState != AudioDataLoadState.Failed)
-        {
-            Debug.Log(clip.loadState);
-            yield return new WaitForEndOfFrame();
-        }
-
-        _audioSource.clip = clip;
+        _audioSource.clip = _birdDatabaseHandler.GetUnknownBirdSong().Clip;
         _audioSource.Play();
     }
 
