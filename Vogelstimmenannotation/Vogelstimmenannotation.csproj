@@ -87,11 +87,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BadProgrammingScript.cs" />
+    <Compile Include="Assets\DoorScript.cs" />
+    <Compile Include="Assets\ProfileButton.cs" />
+    <Compile Include="Assets\Quit.cs" />
+    <Compile Include="Assets\Scripts\BadProgrammingScript.cs" />
+    <Compile Include="Assets\Scripts\Ball.cs" />
     <Compile Include="Assets\Scripts\Bird.cs" />
+    <Compile Include="Assets\Scripts\BirdButtonScript.cs" />
     <Compile Include="Assets\Scripts\BirdFactory.cs" />
-    <Compile Include="Assets\Scripts\CameraController.cs" />
-    <Compile Include="Assets\Scripts\Commands.cs" />
+    <Compile Include="Assets\Scripts\BirdIdentificationScreen.cs" />
+    <Compile Include="Assets\Scripts\CreateButtons.cs" />
     <Compile Include="Assets\Scripts\Database\BirdData\BirdDatabase.cs" />
     <Compile Include="Assets\Scripts\Database\BirdData\BirdDatabaseHandler.cs" />
     <Compile Include="Assets\Scripts\Database\BirdData\BirdSong.cs" />
@@ -100,8 +105,15 @@
     <Compile Include="Assets\Scripts\Database\PlayerData\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuScript.cs" />
     <Compile Include="Assets\Scripts\Menu\ProfileCreditsPage.cs" />
+    <Compile Include="Assets\Scripts\Player\Commands.cs" />
+    <Compile Include="Assets\Scripts\Player\ExplorationState.cs" />
+    <Compile Include="Assets\Scripts\Player\IdentificationState.cs" />
+    <Compile Include="Assets\Scripts\Player\MenuState.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine.cs" />
+    <Compile Include="Assets\Scripts\Player\StateOutput.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\PlayerStates\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Profiles\Profile.cs" />
     <Compile Include="Assets\Scripts\Profiles\ProfilesManager.cs" />
     <Compile Include="Assets\Scripts\TestSaveLoad.cs" />

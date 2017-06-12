@@ -23,8 +23,8 @@ public class BirdFactory : MonoBehaviour
         return birdClone;
     }
 
-    public void TestAddBird()
+    public void Interact()
     {
-        GetNewBird(Player.transform.position, 3);
+        GetNewBird(Player.transform.position, 5);
     }
 }

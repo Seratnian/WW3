@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 [CreateAssetMenu(fileName = "BirdDatabase", menuName = "BirdDatabase")]
 [System.Serializable]
@@ -12,18 +12,21 @@ public class BirdDatabase : ScriptableObject, BirdDatabaseHandler
 
     public BirdSong GetUnknownBirdSong()
     {
-        BirdSong unkownBird = _birdSongs.FirstOrDefault(x => x.Identified == false);
+        BirdSong[] songs = _birdSongs.Where(x => x.Identified == false).ToArray();
+        BirdSong unkownBird = songs[UnityEngine.Random.Range(0, songs.Length)];
         
         return unkownBird;
     }
 
     public void IdentifyBird(BirdSong birdSong, string bird)
     {
-        throw new System.NotImplementedException();
+        birdSong.IsBird = bird;
     }
 
-    public void ExcludeBird(BirdSong birdSong, string[] birds)
+    public void ExcludeBird(BirdSong birdSong, string bird)
     {
-        throw new System.NotImplementedException();
+        List<string> list = birdSong.IsNotBird.ToList();
+        list.Add(bird);
+        birdSong.IsNotBird = list.ToArray();
     }
 }

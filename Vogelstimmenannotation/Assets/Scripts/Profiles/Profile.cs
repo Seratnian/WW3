@@ -4,8 +4,9 @@
 public class Profile
 {
     public int Id { private set; get; }
+    public string Name { private set; get; }
 
-    private string savePath;
+    private string _savePath;
     private PlayerData _playerData;
     private static LocalDataHandler<PlayerData> SaveDataHandler
     {
@@ -14,37 +15,31 @@ public class Profile
     private static LocalDataHandler<PlayerData> _saveDataHandler;
 
 
-    public Profile() : this("C:/WW3/")
+    public Profile()
     {
-        
+        _savePath = "C:/WW3/";
     }
 
-    public Profile(string savePath)
+    public void InitProfile(string name)
     {
-        this.savePath = savePath;
-    }
-
-    public void InitProfile()
-    {
-        Id = GetHashCode();
-        Debug.Log("Profile Created. Id: " + Id);
+        Id = GetHashCode() / 100000;
+        Name = name;
+        if (Name == string.Empty) Name = "Unnamed";
         _playerData = new PlayerData();
-    }
 
-    public int GetId()
-    {
-        return Id;
+        Save();
+        Debug.Log(string.Format("Profile created. ID: {0}\nName: {1}", Id, name));
     }
 
     public void Save()
     {
-        SaveDataHandler.SetPathAndName(savePath, Id.ToString()+".playerData");
+        SaveDataHandler.SetPathAndName(_savePath, string.Format("{0}_{1}.playerData", Id, Name));
         SaveDataHandler.Save(_playerData);
     }
 
     public void Load()
     {
-        SaveDataHandler.SetPathAndName(savePath, Id.ToString()+".playerData");
+        SaveDataHandler.SetPathAndName(_savePath, string.Format("{0}_{1}.playerData", Id, Name));
         _playerData = SaveDataHandler.Load();
     }
 }
