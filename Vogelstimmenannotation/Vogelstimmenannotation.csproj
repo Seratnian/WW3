@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scripts\Database\PlayerData\LocalDataHandler.cs" />
     <Compile Include="Assets\Scripts\Database\PlayerData\LocalDataHandlerImplementation.cs" />
     <Compile Include="Assets\Scripts\Database\PlayerData\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\EventCatalogue.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuScript.cs" />
     <Compile Include="Assets\Scripts\Menu\ProfileCreditsPage.cs" />
     <Compile Include="Assets\Scripts\Player\Commands.cs" />

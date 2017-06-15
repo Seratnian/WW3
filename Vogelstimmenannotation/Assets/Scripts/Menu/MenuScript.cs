@@ -1,23 +1,40 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class MenuScript : MonoBehaviour {
-
+public class MenuScript : MonoBehaviour
+{
     public GameObject PanelMenu;
     public GameObject PanelButtons;
 
     private static GameObject _panelMenu;
     private RectTransform _panelButtons;
 
-	void Start () {
+	void Start ()
+    {
         _panelMenu = PanelMenu;
 
-        _panelButtons = PanelButtons.GetComponent<RectTransform>();
-        _panelButtons.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width / 3);
-        _panelButtons.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Screen.height - 100);
+        _panelMenu.SetActive(false);
+    }
+
+    public void CloseMenuInstance()
+    {
+        CloseMenu();
     }
 	
-    public static void ToggleMenu()
+    public static void OpenMenu()
     {
-        _panelMenu.SetActive(!_panelMenu.activeSelf);
+        _panelMenu.SetActive(true);
+        EventCatalogue.OnMenuOpened(null, EventArgs.Empty);
+    }
+
+    public static void CloseMenu()
+    {
+        _panelMenu.SetActive(false);
+        EventCatalogue.OnMenuClosed(null, EventArgs.Empty);
+    }
+
+    public static bool MenuIsOpen()
+    {
+        return _panelMenu.activeSelf;
     }
 }

@@ -16,10 +16,10 @@
         ThrowBall,
         OpenBirDex,
         OpenMenu,
-        OpenIdentification,
+        IdentificationOpened,
         CloseBirDex,
         CloseMenu,
-        CloseIdentification,
+        IdentificationClosed,
         Interact
     }
 }

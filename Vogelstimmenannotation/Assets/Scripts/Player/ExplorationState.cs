@@ -1,15 +1,15 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Deployment.Internal;
 using System.Linq;
 using Commands;
 using UnityEngine;
+using Object = System.Object;
 
 public class ExplorationPlayerState : PlayerState
 {
     private PlayerMovement _playerMovement;
     private PlayerStateMachine _playerStateMachine;
-    private Dictionary<KeyCode, Commands.Player> _keyBindings;
+    private Dictionary<KeyCode, Player> _keyBindings;
     private KeyCode[] _keys;
     private GameObject _ball;
     private GameObject _ballSpawn;
@@ -20,17 +20,23 @@ public class ExplorationPlayerState : PlayerState
         _playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         _ball = Resources.Load("Ball", typeof(GameObject)) as GameObject;
         _ballSpawn = GameObject.FindGameObjectWithTag("BallSpawn");
+        EventCatalogue.IdentificationOpened += OnIdentificationOpened;
 
         BindKeys();
     }
 
+    private void OnIdentificationOpened(Object obj, EventArgs eventArgs)
+    {
+        HandleCommands(Player.IdentificationOpened);
+    }
+
     private void BindKeys()
     {
-        _keyBindings = new Dictionary<KeyCode, Player>()
+        _keyBindings = new Dictionary<KeyCode, Player>
         {
             {KeyCode.Mouse0, Player.ThrowBall},
             {KeyCode.Space, Player.Interact},
-            {KeyCode.Escape, Player.OpenMenu}            
+            {KeyCode.Escape, Player.OpenMenu}
         };
 
         _keys = _keyBindings.Keys.ToArray();
@@ -45,8 +51,8 @@ public class ExplorationPlayerState : PlayerState
     {
         if (Input.anyKeyDown)
         {
-            Commands.Player command = Player.None;
-            for(int i=0; i<_keys.Length;i++)
+            var command = Player.None;
+            for (var i = 0; i < _keys.Length; i++)
                 if (Input.GetKey(_keys[i]))
                 {
                     _keyBindings.TryGetValue(_keys[i], out command);
@@ -61,7 +67,7 @@ public class ExplorationPlayerState : PlayerState
         _playerMovement.enabled = false;
     }
 
-    private void HandleCommands(Commands.Player command)
+    private void HandleCommands(Player command)
     {
         if (command == Player.None) return;
 
@@ -73,34 +79,34 @@ public class ExplorationPlayerState : PlayerState
             case Player.OpenMenu:
                 _playerStateMachine.HandleStateOutput(StateOutput.TransitionToMenuState);
                 break;
+            case Player.IdentificationOpened:
+                _playerStateMachine.HandleStateOutput(StateOutput.TransitionToIdentificationState);
+                break;
             case Player.Interact:
                 Interact();
                 break;
-
         }
     }
 
     private void ThrowBall()
     {
         float throwForce = 50;
-        Vector3 spawnPosition = _ballSpawn.transform.position;
-        Vector3 throwDirection = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)).direction;
+        var spawnPosition = _ballSpawn.transform.position;
+        var throwDirection = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)).direction;
 
-        GameObject ball = GameObject.Instantiate(_ball);
+        var ball = GameObject.Instantiate(_ball);
         ball.transform.position = spawnPosition;
-        
+
 
         ball.GetComponent<Rigidbody>().AddForce(throwDirection * throwForce, ForceMode.Impulse);
     }
 
     private void Interact()
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0));
+        var ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0));
         Debug.DrawRay(_playerMovement.transform.position, ray.direction, Color.blue, 5f);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 3f))
-        {
             hit.transform.SendMessage("Interact", SendMessageOptions.DontRequireReceiver);
-        }
     }
 }

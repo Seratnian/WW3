@@ -1,13 +1,12 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
 using UnityEngine;
+using Object = System.Object;
 
 public class MenuState : PlayerState
 {
-    private GameObject _menuScreen;
-
     private PlayerStateMachine _playerStateMachine;
     private Dictionary<KeyCode, Commands.Player> _keyBindings;
     private KeyCode[] _keys;
@@ -15,8 +14,7 @@ public class MenuState : PlayerState
     public MenuState(PlayerStateMachine playerStateMachine)
     {
         _playerStateMachine = playerStateMachine;
-        _menuScreen = GameObject.FindGameObjectWithTag("MenuScreen");
-        _menuScreen.SetActive(false);
+        EventCatalogue.MenuClosed += OnMenuClosed;
 
         BindKeys();
     }
@@ -31,15 +29,22 @@ public class MenuState : PlayerState
         _keys = _keyBindings.Keys.ToArray();
     }
 
+    private void OnMenuClosed(Object obj, EventArgs eventArgs)
+    {
+        _playerStateMachine.HandleStateOutput(StateOutput.TransitionToExplorationState);
+    }
+
     public void OnStateEnter()
     {
-        _menuScreen.SetActive(true);
+        if (!MenuScript.MenuIsOpen())
+        {
+            MenuScript.OpenMenu();
+            EventCatalogue.OnMenuOpened(this, EventArgs.Empty);
+        }
     }
 
     public void OnStateUpdate()
     {
-        if(_menuScreen.activeSelf==false)
-            _playerStateMachine.HandleStateOutput(StateOutput.TransitionToExplorationState);
         if (Input.anyKeyDown)
         {
             Commands.Player command = Player.None;
@@ -55,7 +60,11 @@ public class MenuState : PlayerState
 
     public void OnStateExit()
     {
-        _menuScreen.SetActive(false);
+        if (MenuScript.MenuIsOpen())
+        {
+            MenuScript.CloseMenu();
+            EventCatalogue.OnMenuClosed(this, EventArgs.Empty);
+        }
     }
 
     private void HandleCommands(Commands.Player command)

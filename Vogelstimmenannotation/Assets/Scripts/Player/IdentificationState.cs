@@ -1,13 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
 using UnityEngine;
+using Object = System.Object;
 
 public class IdentificationState : PlayerState
 {
-    private GameObject _identificationScreen;
-
     private PlayerStateMachine _playerStateMachine;
     private Dictionary<KeyCode, Commands.Player> _keyBindings;
     private KeyCode[] _keys;
@@ -15,8 +15,7 @@ public class IdentificationState : PlayerState
     public IdentificationState(PlayerStateMachine playerStateMachine)
     {
         _playerStateMachine = playerStateMachine;
-        _identificationScreen = GameObject.FindGameObjectWithTag("IdentificationScreen");
-        _identificationScreen.SetActive(false);
+        EventCatalogue.IdentificationClosed += OnIdentificationClosedEvent;
 
         BindKeys();
     }
@@ -25,22 +24,24 @@ public class IdentificationState : PlayerState
     {
         _keyBindings = new Dictionary<KeyCode, Player>()
         {
-            {KeyCode.Escape, Player.CloseMenu}
+            
         };
 
         _keys = _keyBindings.Keys.ToArray();
     }
 
+    private void OnIdentificationClosedEvent(Object obj, EventArgs eventArgs)
+    {
+        HandleCommands(Player.IdentificationClosed);
+    }
+
     public void OnStateEnter()
     {
-        _identificationScreen.SetActive(true);
+        
     }
 
     public void OnStateUpdate()
     {
-        if (_identificationScreen.activeSelf == false)
-            _playerStateMachine.HandleStateOutput(StateOutput.TransitionToExplorationState);
-
         if (Input.anyKeyDown)
         {
             Commands.Player command = Player.None;
@@ -56,13 +57,12 @@ public class IdentificationState : PlayerState
 
     public void OnStateExit()
     {
-        _identificationScreen.GetComponent<BirdIdentificationScreen>().CancelIdentification();
-        _identificationScreen.SetActive(false);
+
     }
 
     private void HandleCommands(Player command)
     {
         if (command == Player.None) return;
-        if (command == Player.CloseMenu) _playerStateMachine.HandleStateOutput(StateOutput.TransitionToExplorationState);
+        if (command == Player.IdentificationClosed) _playerStateMachine.HandleStateOutput(StateOutput.TransitionToExplorationState);
     }
 }

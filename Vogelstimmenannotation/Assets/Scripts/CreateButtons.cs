@@ -15,7 +15,7 @@ public class CreateButtons : MonoBehaviour
 
         if (!File.Exists(_birdListPath))
 	    {
-	        string[] birdList = new[] {"Cuckoo", "Owl", "Nightingale", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird", "RandomBird"};
+	        List<string> birdList = new List<string>() {"Cuckoo", "Owl", "Nightingale", "RandomBird"};
 	        string json = Newtonsoft.Json.JsonConvert.SerializeObject(birdList);
 	        File.WriteAllText(_birdListPath, json);
 	    }
@@ -25,7 +25,7 @@ public class CreateButtons : MonoBehaviour
 
     public void CreateButtonsList()
     {
-        string[] birdList = LoadAndGetBirdList();
+        List<string> birdList = LoadAndGetBirdList();
 
         foreach (string bird in birdList)
         {
@@ -37,10 +37,10 @@ public class CreateButtons : MonoBehaviour
         }
     }
 
-    private string[] LoadAndGetBirdList()
+    private List<string> LoadAndGetBirdList()
     {
         string json = File.ReadAllText(_birdListPath);
         Debug.Log(json);
-        return Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(json);
+        return Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(json);
     }
 }

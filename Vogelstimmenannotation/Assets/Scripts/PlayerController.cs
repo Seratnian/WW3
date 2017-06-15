@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Commands;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour, PlayerStateMachine
 {
