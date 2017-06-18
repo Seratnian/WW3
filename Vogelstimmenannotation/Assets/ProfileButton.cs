@@ -10,6 +10,7 @@ public class ProfileButton : MonoBehaviour
 
     public void SelectProfile()
     {
+        Debug.Log("Selecting profile..");
         ProfilesManager.SelectProfile(ButtonText.text);
     }
 

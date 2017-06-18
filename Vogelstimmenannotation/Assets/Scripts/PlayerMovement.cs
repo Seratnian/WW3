@@ -19,10 +19,9 @@ public class PlayerMovement : MonoBehaviour
 	
 	private void Update ()
 	{
-        if (!Input.anyKey)
-	        return;
+        //if (!Input.anyKey) return;
 
-	    if (Input.GetKey(KeyCode.Mouse1))
+	    //if (Input.GetKey(KeyCode.Mouse1))
 	        Rotate();
 
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)

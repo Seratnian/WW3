@@ -5,6 +5,7 @@ using UnityEngine;
 public class DoorScript : MonoBehaviour
 {
     public float openingDuration;
+    public GameObject door;
 
     private bool open;
     private bool opening;
@@ -15,23 +16,28 @@ public class DoorScript : MonoBehaviour
         {
             if (open)
             {
-                StartCoroutine(OpenDoor(new Vector3(0, 0, 0)));
+                StartCoroutine(OpenDoor());
             }
             else
             {
-                StartCoroutine(OpenDoor(new Vector3(0, 90, 0)));
+                StartCoroutine(OpenDoor());
             }
         }            
     }
 
-    private IEnumerator OpenDoor(Vector3 endRotation)
+    private IEnumerator OpenDoor()
     {
         opening = true;
-        Vector3 startRotation = transform.eulerAngles;
+        Vector3 startRotation = door.transform.localEulerAngles;
+        Vector3 endRotation = startRotation;
+        if (!open)
+            endRotation.y -= 90;
+        else
+            endRotation.y += 90;
 
         for (float i = 0; i < openingDuration; i += Time.fixedDeltaTime)
         {
-            transform.eulerAngles = Vector3.Lerp(startRotation, endRotation, i / openingDuration);
+            door.transform.localEulerAngles = Vector3.Lerp(startRotation, endRotation, i / openingDuration);
             yield return new WaitForFixedUpdate();
         }
 

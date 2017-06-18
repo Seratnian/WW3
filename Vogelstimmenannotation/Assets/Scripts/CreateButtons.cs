@@ -32,6 +32,7 @@ public class CreateButtons : MonoBehaviour
             GameObject newButton = Instantiate(buttonPrefab);
             newButton.name = bird;
             newButton.transform.SetParent(transform);
+            newButton.transform.localScale = Vector3.one;
             newButton.transform.GetChild(0).GetComponent<Text>().text = bird;
             newButton.SetActive(true);
         }

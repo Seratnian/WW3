@@ -12,12 +12,13 @@ public class ProfilesManager : MonoBehaviour
     public GameObject ProfilesContainer;
     public GameObject ButtonPrefab;
     public InputField CreateProfileName;
-    public InputField DeleteProfileId;
+    public Text DisplayText;
     
     private List<Profile> _profiles;
     private string _profilesDirectory, _profilesFileName;
     private string ProfilesFullPath { get { return _profilesDirectory + _profilesFileName; } }
     private Profile _currentProfile;
+    private Profile _currentlySelected;
 
 	private void Start ()
 	{
@@ -60,6 +61,7 @@ public class ProfilesManager : MonoBehaviour
         {
             GameObject button = Instantiate(ButtonPrefab);
             button.transform.SetParent(ProfilesContainer.transform);
+            button.transform.localScale = Vector3.one;
             button.GetComponentInChildren<Text>().text = string.Format("{0}; ID: {1}", profile.Name, profile.Id);
             button.SetActive(true);
         }
@@ -76,29 +78,35 @@ public class ProfilesManager : MonoBehaviour
         profile.InitProfile(CreateProfileName.text);
         _profiles.Add(profile);
         SaveProfiles();
+        DisplayText.text = string.Format("Profile created.\nName: {0}\nID: {1}", profile.Name, profile.Id);
+        _currentlySelected = profile;
         CreateProfileButtons();
     }
 
     public void DeleteProfile()
     {
-        foreach (Profile profile in _profiles)
-        {
-            if (profile.Id == Int32.Parse(DeleteProfileId.text))
-                _profiles.Remove(profile);
-        } 
+        _profiles.Remove(_currentlySelected);
+        DisplayText.text = "Profile deleted.";
         CreateProfileButtons();
     }
 
-    public void SelectProfile(string buttonName)
+    public void SelectProfile(string buttonText)
     {
         foreach (Profile profile in _profiles)
         {
-            if (string.Format("{0}; ID: {1}", profile.Name, profile.Id) == buttonName)
+            if (string.Format("{0}; ID: {1}", profile.Name, profile.Id) == buttonText)
             {
-                _currentProfile = profile;
+                _currentlySelected = profile;
                 Debug.Log(string.Format("Profile selected.\n{0}; ID: {1}", profile.Name, profile.Id));
+                DisplayText.text =
+                    string.Format("Selected profile\nName: {0}\n ID: {1}", profile.Name, profile.Id);
             }
         }
+    }
+
+    public void UseCurrentlySelectedProfile()
+    {
+        _currentProfile = _currentlySelected;
     }
 
     public void SaveGame()

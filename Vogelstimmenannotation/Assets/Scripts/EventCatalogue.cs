@@ -8,6 +8,7 @@ public static class EventCatalogue
     public static event EventHandler IdentificationOpened;
     public static event EventHandler IdentificationClosed;
     public static event EventHandler BirdHit;
+    public static event EventHandler PlayerDataChanged;
 
     public static void OnMenuOpened(Object obj, EventArgs eventArgs)
     {
@@ -37,5 +38,11 @@ public static class EventCatalogue
     {
         if (BirdHit != null)
             BirdHit(obj, eventArgs);
+    }
+
+    public static void OnPlayerDataChanged(Object obj, EventArgs eventArgs)
+    {
+        if (PlayerDataChanged != null)
+            PlayerDataChanged(obj, eventArgs);
     }
 }
