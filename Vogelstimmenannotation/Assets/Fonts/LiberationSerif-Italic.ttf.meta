@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: a5d8a84c6bf267940a12453d76c1d0a1
+timeCreated: 1498924679
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Liberation Serif
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 18ed0c361e20730418b224ca3cd493b8, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
