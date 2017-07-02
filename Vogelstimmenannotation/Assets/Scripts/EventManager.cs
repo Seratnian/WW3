@@ -3,11 +3,11 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StringEvent : UnityEvent<string> { };
+public class ObjectEvent : UnityEvent<object> { };
 
 public class EventManager : MonoBehaviour {
 
-    private Dictionary<string, StringEvent> eventDictionary;
+    private Dictionary<string, ObjectEvent> eventDictionary;
     private static EventManager eventManager;
     public static EventManager instance
     {
@@ -29,33 +29,33 @@ public class EventManager : MonoBehaviour {
     void Init()
     {
         if (eventDictionary == null)
-            eventDictionary = new Dictionary<string, StringEvent>();
+            eventDictionary = new Dictionary<string, ObjectEvent>();
     }
 
-    public static void StartListening(string eventName, UnityAction<string> listener)
+    public static void StartListening(string eventName, UnityAction<object> listener)
     {
-        StringEvent thisEvent = null;
+        ObjectEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
             thisEvent.AddListener(listener);
         else
         {
-            thisEvent = new StringEvent();
+            thisEvent = new ObjectEvent();
             thisEvent.AddListener(listener);
             instance.eventDictionary.Add(eventName, thisEvent);
         }
     }
 
-    public static void StopListening(string eventName, UnityAction<string> listener)
+    public static void StopListening(string eventName, UnityAction<object> listener)
     {
         if (eventManager == null) return;
-        StringEvent thisEvent = null;
+        ObjectEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
             thisEvent.RemoveListener(listener);
     }
 
-    public static void TriggerEvent(string eventName, string data = "")
+    public static void TriggerEvent(string eventName, object data = null)
     {
-        StringEvent thisEvent = null;
+        ObjectEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
             thisEvent.Invoke(data);

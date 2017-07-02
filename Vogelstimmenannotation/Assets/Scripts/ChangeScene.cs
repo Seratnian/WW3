@@ -26,12 +26,9 @@ public class ChangeScene : MonoBehaviour
         }
 	}
 
-    private void ChangeToScene(string data)
+    private void ChangeToScene(object data)
     {
-        if (data != "")
-        {
-            SceneManager.LoadScene(nextScene);
-        }
+        SceneManager.LoadScene(nextScene);
     }
 
     IEnumerator Load()

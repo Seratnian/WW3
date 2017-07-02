@@ -15,7 +15,7 @@ public class TEST_Events : MonoBehaviour
         }
 	}
 
-    void LogToConsole(string eventName)
+    void LogToConsole(object eventName)
     {
         Debug.Log(eventName + " was called!");
     }

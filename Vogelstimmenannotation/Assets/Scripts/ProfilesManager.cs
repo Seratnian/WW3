@@ -33,11 +33,13 @@ public class ProfilesManager : MonoBehaviour {
         Vector3 position = GameObject.Find("new Profile").transform.position;
         foreach (Profile profile in Profiles)
         {
-            GameObject button = Instantiate(Resources.Load("Button"), transform) as GameObject;
+            SendEventWhenPressed button = (Instantiate(Resources.Load("Button"), transform) as GameObject)
+                .GetComponent("SendEventWhenPressed") as SendEventWhenPressed;
             position.Set(position.x, position.y + button.transform.lossyScale.y * 1.5f, position.z);
             button.transform.position = position;
             button.name = profile.Name;
-            ((SendEventWhenPressed)button.GetComponent("SendEventWhenPressed")).eventName = "useProfile";
+            button.eventName = "useProfile";
+            button.eventData = profile;
             TextMesh text = button.transform.GetChild(0).GetComponent<TextMesh>();
             text.text = profile.Name;
         }
@@ -48,13 +50,13 @@ public class ProfilesManager : MonoBehaviour {
         SaveProfiles();
     }
 
-    public void MakeProfile(string data)
+    public void MakeProfile(object data)
     {
-        Debug.Log("tt");
         string name = "test_" + (int)(Random.value * 1000); // TODO get Name from DB
         Profile profile = new Profile(name);
         Profiles.Add(profile);
         SaveProfiles();
+        ShowProfiles();
     }
 
     private bool LoadProfiles()
