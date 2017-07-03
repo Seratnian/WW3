@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainController : MonoBehaviour {
+public class MainController : MonoBehaviour
+{
     DataStorage dataStorage;
     Player player;
 
-	void Start ()
+    void Start()
     {
         // TODO remove if/else statement
         if (GameObject.Find("DataStorage") != null)
@@ -22,10 +23,7 @@ public class MainController : MonoBehaviour {
         if (!dataStorage.Profile.FinishedTutorial)
         {
             GameObject Tutorial = Instantiate(Resources.Load("Tutorial"), GameObject.Find("Level").transform) as GameObject;
-            // TODO remove
-            GameObject.Find("Emulator").GetComponent<Emulation>().addForceTo = Tutorial.transform.GetChild(0).gameObject;
-            // TODO
         }
-	}
+    }
 
 }

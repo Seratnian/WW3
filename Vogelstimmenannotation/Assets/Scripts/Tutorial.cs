@@ -4,33 +4,37 @@ using UnityEngine.Events;
 
 public class Tutorial : MonoBehaviour
 {
-    ArrayList buttons = new ArrayList();
-    int ButtonsToBePressed;
-    UnityAction nextAction;
+    private ArrayList buttons = new ArrayList();
+    private int ButtonsToBePressed;
+    private Vector3 shufflePosition;
+    private UnityAction[] nextAction;
+    private int actionIndex = 0;
 
-	void Start ()
+    public UnityAction NextAction
     {
+        get
+        {
+            return nextAction[actionIndex++];
+        }
+    }
+
+    void Start()
+    {
+        shufflePosition = (GameObject.Find("ShuffleTarget") as GameObject).transform.position;
+        nextAction = new UnityAction[]
+        {
+            StartFirstLevel,
+            StartSecondLevel,
+            StartThirdLevel,
+            StartFourthLevel
+        };
         EventManager.StartListening("PlaySound", SoundButtonPressed);
         foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
         {
             //store buttons for later use
             buttons.Add(rigidbody.gameObject);
         }
-        StartThirdLevel();
-	}
-
-    private void StartFirstLevel()
-    {
-        // disable the last two buttons
-        foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
-        {
-            //store buttons for later use
-            buttons.Add(rigidbody.gameObject);
-            if (rigidbody.gameObject.name.EndsWith("2") || rigidbody.gameObject.name.EndsWith("3"))
-                rigidbody.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
-        ButtonsToBePressed = buttons.Count / 3;
-        nextAction = StartSecondLevel;
+        NextAction.Invoke();
     }
 
     private void SoundButtonPressed(object data)
@@ -41,9 +45,33 @@ public class Tutorial : MonoBehaviour
             ButtonsToBePressed--;
             if (ButtonsToBePressed <= 0)
             {
-                nextAction.Invoke();
+                NextAction.Invoke();
             }
         }
+    }
+
+    private void ShuffleButtons(ArrayList buttons)
+    {
+        foreach (object buttonObject in buttons)
+        {
+            Rigidbody button = buttonObject as Rigidbody;
+            button.GetComponent<ButtonPositionReset>().originalPosition = shufflePosition;
+        }
+    }
+
+    private void StartFirstLevel()
+    {
+        ArrayList activeButtons = new ArrayList();
+        // disable the last two buttons
+        foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
+        {
+            if (rigidbody.gameObject.name.EndsWith("2") || rigidbody.gameObject.name.EndsWith("3"))
+                rigidbody.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            else
+                activeButtons.Add(rigidbody);
+        }
+        ButtonsToBePressed = buttons.Count / 3;
+        ShuffleButtons(activeButtons);
     }
 
     private void StartSecondLevel()
@@ -58,7 +86,6 @@ public class Tutorial : MonoBehaviour
             button.GetComponent<SendEventWhenPressed>().WasCalledAtLeastOnce = false;
         }
         ButtonsToBePressed = buttons.Count * 2 / 3;
-        nextAction = StartThirdLevel;
     }
 
     private void StartThirdLevel()
@@ -70,12 +97,12 @@ public class Tutorial : MonoBehaviour
             button.GetComponent<SendEventWhenPressed>().WasCalledAtLeastOnce = false;
         }
         ButtonsToBePressed = buttons.Count;
-        nextAction = StartFourthLevel;
 
     }
 
     private void StartFourthLevel()
     {
+        EventManager.StopListening("PlaySound", SoundButtonPressed);
         Debug.Log("Vögel abwerfen und so...");
     }
 

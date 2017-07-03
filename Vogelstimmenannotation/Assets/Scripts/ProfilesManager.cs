@@ -3,7 +3,8 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public class ProfilesManager : MonoBehaviour {
+public class ProfilesManager : MonoBehaviour
+{
     public string SavePath = "./Profiles";
 
     private ArrayList Profiles;
@@ -11,7 +12,7 @@ public class ProfilesManager : MonoBehaviour {
     private string AbsoluteSavePath;
     private string FileExtension = ".pro";
 
-	void Start ()
+    void Start()
     {
         Profiles = new ArrayList();
         AbsoluteSavePath = new DirectoryInfo(SavePath).FullName;
@@ -22,7 +23,7 @@ public class ProfilesManager : MonoBehaviour {
         LoadProfiles();
         EventManager.StartListening("createNewProfile", MakeProfile);
         ShowProfiles();
-	}
+    }
 
     private void ShowProfiles()
     {
@@ -30,7 +31,7 @@ public class ProfilesManager : MonoBehaviour {
         {
             Destroy(button.gameObject);
         }
-        Vector3 position = GameObject.Find("new Profile").transform.position;
+        Vector3 position = GameObject.Find("new Profile").GetComponent<ButtonPositionReset>().originalPosition;
         foreach (Profile profile in Profiles)
         {
             SendEventWhenPressed button = (Instantiate(Resources.Load("Button"), transform) as GameObject)

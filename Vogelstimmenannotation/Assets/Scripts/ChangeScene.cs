@@ -8,12 +8,13 @@ public class ChangeScene : MonoBehaviour
     private bool asynchronous = false;
     private AsyncOperation sceneLoading;
 
-	void Start () {
+    void Start()
+    {
         switch (SceneManager.GetActiveScene().name)
         {
             case "RootScene":
                 nextScene = "LoadScene";
-	            EventManager.StartListening("useProfile", ChangeToScene);
+                EventManager.StartListening("useProfile", ChangeToScene);
                 break;
             case "LoadScene":
                 nextScene = "MainScene";
@@ -24,7 +25,7 @@ public class ChangeScene : MonoBehaviour
         {
             StartCoroutine(Load());
         }
-	}
+    }
 
     private void ChangeToScene(object data)
     {
@@ -33,6 +34,7 @@ public class ChangeScene : MonoBehaviour
 
     IEnumerator Load()
     {
+        yield return new WaitForSeconds(5);
         sceneLoading = SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Single);
         sceneLoading.allowSceneActivation = true;
         while (!sceneLoading.isDone)

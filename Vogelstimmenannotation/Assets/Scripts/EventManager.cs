@@ -3,12 +3,17 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObjectEvent : UnityEvent<object> { };
+public class ObjectEvent : UnityEvent<object>
+{
 
-public class EventManager : MonoBehaviour {
+};
+
+public class EventManager : MonoBehaviour
+{
 
     private Dictionary<string, ObjectEvent> eventDictionary;
     private static EventManager eventManager;
+
     public static EventManager instance
     {
         get
@@ -47,7 +52,8 @@ public class EventManager : MonoBehaviour {
 
     public static void StopListening(string eventName, UnityAction<object> listener)
     {
-        if (eventManager == null) return;
+        if (eventManager == null)
+            return;
         ObjectEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
             thisEvent.RemoveListener(listener);
@@ -62,7 +68,7 @@ public class EventManager : MonoBehaviour {
         }
         else
         {
-            Debug.Log("no event found");
+            Debug.Log("No event found.");
         }
     }
 }
