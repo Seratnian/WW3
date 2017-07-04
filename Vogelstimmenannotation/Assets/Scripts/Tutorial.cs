@@ -9,6 +9,7 @@ public class Tutorial : MonoBehaviour
     private Vector3 shufflePosition;
     private UnityAction[] nextAction;
     private int actionIndex = 0;
+    private GameObject board;
 
     public UnityAction NextAction
     {
@@ -20,6 +21,7 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
+        board = GameObject.Find("Board") as GameObject;
         shufflePosition = (GameObject.Find("ShuffleTarget") as GameObject).transform.position;
         nextAction = new UnityAction[]
         {
@@ -50,28 +52,48 @@ public class Tutorial : MonoBehaviour
         }
     }
 
-    private void ShuffleButtons(ArrayList buttons)
+    IEnumerator ShuffleButtons(ArrayList buttons)
     {
         foreach (object buttonObject in buttons)
         {
             Rigidbody button = buttonObject as Rigidbody;
-            button.GetComponent<ButtonPositionReset>().originalPosition = shufflePosition;
+            button.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+            button.GetComponent<SendEventWhenPressed>().enabled = false;
+            button.GetComponent<ButtonPositionReset>().originalPosition = getRandomVector(shufflePosition);
         }
+
+        yield return new WaitForSeconds(3);
+
+        foreach (object buttonObject in buttons)
+        {
+            Rigidbody button = buttonObject as Rigidbody;
+            button.GetComponent<ButtonPositionReset>().originalPosition = button.transform.position;
+        }
+
+        yield return new WaitForSeconds(1);
+
+        foreach (object buttonObject in buttons)
+        {
+            Rigidbody button = buttonObject as Rigidbody;
+            button.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY;
+            button.GetComponent<SendEventWhenPressed>().enabled = true;
+        }
+
     }
 
     private void StartFirstLevel()
     {
         ArrayList activeButtons = new ArrayList();
         // disable the last two buttons
-        foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
+        foreach (Rigidbody rigidbody in board.GetComponentsInChildren<Rigidbody>())
         {
-            if (rigidbody.gameObject.name.EndsWith("2") || rigidbody.gameObject.name.EndsWith("3"))
-                rigidbody.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            if (getParentName(rigidbody.gameObject).EndsWith("2") || getParentName(rigidbody.gameObject).EndsWith("3"))
+                disableButton(rigidbody.gameObject);
             else
                 activeButtons.Add(rigidbody);
         }
         ButtonsToBePressed = buttons.Count / 3;
-        ShuffleButtons(activeButtons);
+        //StartCoroutine(ShuffleButtons(activeButtons));
     }
 
     private void StartSecondLevel()
@@ -79,10 +101,10 @@ public class Tutorial : MonoBehaviour
         // disable the first button, enable the rest
         foreach (GameObject button in buttons)
         {
-            if (button.name.EndsWith("1"))
-                button.GetComponent<MeshRenderer>().enabled = false;
+            if (getParentName(GetComponent<Rigidbody>().gameObject).EndsWith("1"))
+                enableButton(button);
             else
-                button.GetComponent<MeshRenderer>().enabled = true;
+                disableButton(button);
             button.GetComponent<SendEventWhenPressed>().WasCalledAtLeastOnce = false;
         }
         ButtonsToBePressed = buttons.Count * 2 / 3;
@@ -93,7 +115,7 @@ public class Tutorial : MonoBehaviour
         // enable all buttons
         foreach (GameObject button in buttons)
         {
-            button.GetComponent<MeshRenderer>().enabled = true;
+            enableButton(button);
             button.GetComponent<SendEventWhenPressed>().WasCalledAtLeastOnce = false;
         }
         ButtonsToBePressed = buttons.Count;
@@ -106,4 +128,29 @@ public class Tutorial : MonoBehaviour
         Debug.Log("Vögel abwerfen und so...");
     }
 
+    private string getParentName(GameObject gameObject)
+    {
+        return gameObject.transform.parent.gameObject.name;
+    }
+
+    private void disableButton(GameObject button)
+    {
+        button.GetComponent<MeshRenderer>().enabled = false;
+        button.GetComponent<BoxCollider>().enabled = false;
+    }
+
+    private void enableButton(GameObject button)
+    {
+        button.GetComponent<MeshRenderer>().enabled = true;
+        button.GetComponent<BoxCollider>().enabled = true;
+    }
+
+    private Vector3 getRandomVector(Vector3 baseVector = default(Vector3))
+    {
+        return new Vector3(
+            baseVector.x + Random.value * 0,
+            baseVector.y + Random.value * 0,
+            baseVector.z
+        );
+    }
 }

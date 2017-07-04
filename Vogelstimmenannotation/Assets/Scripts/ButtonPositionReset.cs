@@ -20,11 +20,6 @@ public class ButtonPositionReset : MonoBehaviour
 
     void Update()
     {
-        Return();
-    }
-
-    void Return()
-    {
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
 
