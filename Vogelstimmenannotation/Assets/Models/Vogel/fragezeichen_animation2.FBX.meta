@@ -1,16 +1,24 @@
 fileFormatVersion: 2
-guid: 228600e9e666bc443a217541444f107a
-timeCreated: 1499128804
+guid: 3386037fe2c19a74e856b7139e65de4f
+timeCreated: 1500041251
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Fragezeichen
+    100002: Fragezeichen Hauptbone
+    100004: //RootNode
+    100006: "linker Fl\xFCgel"
+    100008: "linker Fl\xFCgel001"
+    400000: Fragezeichen
+    400002: Fragezeichen Hauptbone
+    400004: //RootNode
+    400006: "linker Fl\xFCgel"
+    400008: "linker Fl\xFCgel001"
     4300000: Fragezeichen
+    7400000: Take 001
     9500000: //RootNode
+    13700000: Fragezeichen
   materials:
     importMaterials: 1
     materialName: 0
@@ -33,7 +41,45 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Fragezeichen
+        weight: 1
+      - path: Fragezeichen Hauptbone
+        weight: 1
+      - path: "Fragezeichen Hauptbone/linker Fl\xFCgel"
+        weight: 1
+      - path: "Fragezeichen Hauptbone/linker Fl\xFCgel001"
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
