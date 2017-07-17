@@ -48,7 +48,7 @@ namespace WW3.GameWorld
 
             while (!download.isDone)
             {
-                Debug.Log(download.progress);
+                Debug.Log(string.Format("Download Progress: {0}%", Mathf.RoundToInt(download.progress*100)));
                 yield return new WaitForEndOfFrame();
             }
 
@@ -65,12 +65,12 @@ namespace WW3.GameWorld
         {
             if (Ready)
                 if (play)
-                    StartCoroutine(PlaySoundWhenReady());
+                    StartCoroutine(PlaySoundOnReady());
                 else
                     _audioSource.Stop();
         }
 
-        private IEnumerator PlaySoundWhenReady()
+        private IEnumerator PlaySoundOnReady()
         {
             while (!Ready)
                 yield return new WaitForEndOfFrame();

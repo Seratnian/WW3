@@ -1,26 +1,32 @@
 ﻿using System.Collections;
-using System.Runtime.Serialization;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace WW3.GameWorld
 {
     [RequireComponent(typeof(SphereCollider))]
-    public class BirdSpawn : MonoBehaviour
+    public class BirdHouse : MonoBehaviour, InteractableObject
     {
         private static BirdPool _birdPool;
 
         private Bird _currentBird;
-        [SerializeField]private int _playerDetectionRange;
+        [SerializeField] private int _playerDetectionRange;
 
-        private void Start()
+        public void Interact(object actor)
         {
-            GetComponent<SphereCollider>().radius = _playerDetectionRange;
-            if (_birdPool == null) _birdPool = new BirdPool(5, "BirdPool_SpawnPoints");
+            Interact();
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void Interact()
         {
+            StoreBird();
             StartCoroutine(SpawnBird());
+        }
+
+        private void Awake()
+        {
+            GetComponent<SphereCollider>().radius = _playerDetectionRange;
+            if (_birdPool == null) _birdPool = new BirdPool(2,"BirdPool_BirdHouses");
         }
 
         private void OnTriggerExit(Collider other)

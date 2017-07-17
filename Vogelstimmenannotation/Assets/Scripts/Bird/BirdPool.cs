@@ -15,7 +15,25 @@ namespace WW3.GameWorld
             _birds = new Queue<Bird>();
             PrefabCatalogue.Instance.MyDictionary.TryGetValue("Bird", out _birdPrefab);
             _birdPool = new GameObject("BirdPool");
-            RefillThreshold = 2;
+            RefillThreshold = 5;
+            FillQueueIfBelowThreshold();
+        }
+
+        public BirdPool(int refillThreshold)
+        {
+            _birds = new Queue<Bird>();
+            PrefabCatalogue.Instance.MyDictionary.TryGetValue("Bird", out _birdPrefab);
+            _birdPool = new GameObject("BirdPool");
+            RefillThreshold = refillThreshold;
+            FillQueueIfBelowThreshold();
+        }
+
+        public BirdPool(int refillThreshold, string gameObjectName)
+        {
+            _birds = new Queue<Bird>();
+            PrefabCatalogue.Instance.MyDictionary.TryGetValue("Bird", out _birdPrefab);
+            _birdPool = new GameObject(gameObjectName);
+            RefillThreshold = refillThreshold;
             FillQueueIfBelowThreshold();
         }
 
@@ -41,6 +59,7 @@ namespace WW3.GameWorld
         {
             GameObject birdClone = Object.Instantiate(_birdPrefab);
             birdClone.transform.SetParent(_birdPool.transform);
+            birdClone.transform.position = new Vector3(0,-100,0);
 
             Bird bird = birdClone.GetComponent<Bird>();
             bird.LoadSoundAndSetGameObjectTo(false);
